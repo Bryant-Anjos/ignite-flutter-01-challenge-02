@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:notes/widgets/add_note_button.dart';
+import 'package:notes/widgets/notes_list.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -16,35 +18,27 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            for (int i = 0; i < notes.length; i++)
-              Card(
-                child: ListTile(
-                  title: Text(notes[i]),
-                  onTap: () async {
-                    var response = await Navigator.pushNamed(
-                      context,
-                      "/create-note",
-                      arguments: notes[i],
-                    );
-                    if (response != null) {
-                      var description = response as String;
-                      if (description.isEmpty) {
-                        notes.removeAt(i);
-                      } else {
-                        notes[i] = description;
-                      }
-                      setState(() {});
-                    }
-                  },
-                ),
-              ),
-          ],
+        child: NotesList(
+          notes: notes,
+          onTap: (i) async {
+            var response = await Navigator.pushNamed(
+              context,
+              "/create-note",
+              arguments: notes[i],
+            );
+            if (response != null) {
+              var description = response as String;
+              if (description.isEmpty) {
+                notes.removeAt(i);
+              } else {
+                notes[i] = description;
+              }
+              setState(() {});
+            }
+          },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+      floatingActionButton: AddNoteButton(
         onPressed: () async {
           var description = await Navigator.pushNamed(
             context,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes/widgets/large_button.dart';
 
 class CreateNotePage extends StatefulWidget {
   @override
@@ -59,19 +60,11 @@ class _CreateNotePageState extends State<CreateNotePage> {
               height: 32,
             ),
             if (description.isNotEmpty)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 250,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context, description);
-                      },
-                      child: Text("Save"),
-                    ),
-                  ),
-                ],
+              LargeButton(
+                text: "Save",
+                onPressed: () {
+                  Navigator.pop(context, description);
+                },
               ),
           ],
         ),
