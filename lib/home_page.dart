@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notes/widgets/add_note_button.dart';
+import 'package:notes/widgets/large_button.dart';
 import 'package:notes/widgets/notes_list.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,38 +18,45 @@ class _HomePageState extends State<HomePage> {
         title: Text("NOTES"),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: NotesList(
-          notes: notes,
-          onTap: (i) async {
-            var response = await Navigator.pushNamed(
-              context,
-              "/create-note",
-              arguments: notes[i],
-            );
-            if (response != null) {
-              var description = response as String;
-              if (description.isEmpty) {
-                notes.removeAt(i);
-              } else {
-                notes[i] = description;
+      body: Column(
+        children: [
+          LargeButton(
+            text: "New Note",
+            onPressed: () async {
+              var description = await Navigator.pushNamed(
+                context,
+                "/create-note",
+              );
+              if (description != null) {
+                notes.add(description as String);
+                setState(() {});
               }
-              setState(() {});
-            }
-          },
-        ),
-      ),
-      floatingActionButton: AddNoteButton(
-        onPressed: () async {
-          var description = await Navigator.pushNamed(
-            context,
-            "/create-note",
-          );
-          if (description != null) {
-            notes.add(description as String);
-            setState(() {});
-          }
-        },
+            },
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: NotesList(
+                notes: notes,
+                onTap: (i) async {
+                  var response = await Navigator.pushNamed(
+                    context,
+                    "/create-note",
+                    arguments: notes[i],
+                  );
+                  if (response != null) {
+                    var description = response as String;
+                    if (description.isEmpty) {
+                      notes.removeAt(i);
+                    } else {
+                      notes[i] = description;
+                    }
+                    setState(() {});
+                  }
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
